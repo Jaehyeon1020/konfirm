@@ -53,7 +53,7 @@ func Run(args []string) int {
 		return execKubectl(args)
 	}
 
-	if err := promptForApproval(ctx, args); err != nil {
+	if err := promptForApproval(ctx); err != nil {
 		fmt.Fprintf(os.Stderr, "approval failed: %v\n", err)
 		return 1
 	}
@@ -61,16 +61,18 @@ func Run(args []string) int {
 	return execKubectl(args)
 }
 
-func promptForApproval(ctx string, args []string) error {
+func promptForApproval(ctx string) error {
 	tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
 	if err != nil {
 		return errors.New("no TTY available for approval prompt")
 	}
 	defer tty.Close()
 
-	fmt.Fprintf(tty, "Context: %s\n", ctx)
-	fmt.Fprintf(tty, "Command: kubectl %s\n", strings.Join(args, " "))
-	fmt.Fprintf(tty, "Type [Y/y] to confirm: ")
+	const ansiBoldRed = "\x1b[1;31m"
+	const ansiReset = "\x1b[0m"
+
+	fmt.Fprintf(tty, "Context: %s%s%s\n", ansiBoldRed, ctx, ansiReset)
+	fmt.Fprintf(tty, "Type [Y/y] to continue: ")
 
 	reader := bufio.NewReader(tty)
 	line, err := reader.ReadString('\n')
@@ -81,6 +83,7 @@ func promptForApproval(ctx string, args []string) error {
 	if !strings.EqualFold(line, "y") {
 		return errors.New("approval phrase mismatch")
 	}
+	fmt.Fprintln(tty, "==================")
 	return nil
 }
 
