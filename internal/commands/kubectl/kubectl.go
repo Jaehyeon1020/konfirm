@@ -69,9 +69,11 @@ func promptForApproval(ctx string) error {
 	defer tty.Close()
 
 	const ansiBoldRed = "\x1b[1;31m"
+	const ansiBoldBlue = "\x1b[1;34m"
 	const ansiReset = "\x1b[0m"
 
-	fmt.Fprintf(tty, "Context: %s%s%s\n", ansiBoldRed, ctx, ansiReset)
+	fmt.Fprintf(tty, "%skonfirm%s is waiting for your confirmation\n", ansiBoldBlue, ansiReset)
+	fmt.Fprintf(tty, "🔒 Context: %s%s%s 🔒\n", ansiBoldRed, ctx, ansiReset)
 	fmt.Fprintf(tty, "Type [Y/y] to continue: ")
 
 	reader := bufio.NewReader(tty)
