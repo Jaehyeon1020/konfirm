@@ -15,6 +15,10 @@ func Run(args []string) int {
 		return 2
 	}
 
+	const ansiBoldRed = "\x1b[1;31m"
+	const ansiBoldBlue = "\x1b[1;34m"
+	const ansiReset = "\x1b[0m"
+
 	sub := args[0]
 	switch sub {
 	case "add":
@@ -37,6 +41,9 @@ func Run(args []string) int {
 
 		if !store.IsContextAllowed(cfg.PermanentAllowContexts, currentCtx) {
 			cfg.PermanentAllowContexts = append(cfg.PermanentAllowContexts, currentCtx)
+			fmt.Fprintf(os.Stdout, "context added to allow list: %s%s%s\n", ansiBoldRed, currentCtx, ansiReset)
+		} else {
+			fmt.Fprintf(os.Stdout, "context already allowed: %s%s%s\n", ansiBoldRed, currentCtx, ansiReset)
 		}
 
 		if err := store.SaveConfig(cfg); err != nil {
@@ -56,7 +63,12 @@ func Run(args []string) int {
 		}
 
 		ctx := args[1]
-		cfg.PermanentAllowContexts = store.RemoveContext(cfg.PermanentAllowContexts, ctx)
+		if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
+			cfg.PermanentAllowContexts = store.RemoveContext(cfg.PermanentAllowContexts, ctx)
+			fmt.Fprintf(os.Stdout, "context removed from allow list: %s%s%s\n", ansiBoldRed, ctx, ansiReset)
+		} else {
+			fmt.Fprintf(os.Stdout, "context not in allow list: %s%s%s\n", ansiBoldRed, ctx, ansiReset)
+		}
 		if err := store.SaveConfig(cfg); err != nil {
 			fmt.Fprintf(os.Stderr, "failed to save config: %v\n", err)
 			return 1
@@ -93,6 +105,7 @@ func Run(args []string) int {
 			fmt.Fprintf(os.Stderr, "failed to update state: %v\n", err)
 			return 1
 		}
+		fmt.Fprintf(os.Stdout, "context allowed once for session: %s%s%s\n", ansiBoldRed, currentCtx, ansiReset)
 	default:
 		fmt.Fprintf(os.Stderr, "unknown allow command: %s\n", sub)
 		support.Usage(os.Stderr)
