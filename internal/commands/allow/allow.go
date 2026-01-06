@@ -51,8 +51,8 @@ func Run(args []string) int {
 			return 1
 		}
 	case "remove":
-		if len(args) != 2 {
-			fmt.Fprintln(os.Stderr, "usage: konfirm allow remove <context>")
+		if len(args) != 1 {
+			fmt.Fprintln(os.Stderr, "usage: konfirm allow remove")
 			return 2
 		}
 
@@ -62,7 +62,12 @@ func Run(args []string) int {
 			return 1
 		}
 
-		ctx := args[1]
+		ctx, err := context.GetCurrentContext()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "failed to resolve context: %v\n", err)
+			return 1
+		}
+
 		if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
 			cfg.PermanentAllowContexts = store.RemoveContext(cfg.PermanentAllowContexts, ctx)
 			fmt.Fprintf(os.Stdout, "context removed from allow list: %s%s%s\n", ansiBoldRed, ctx, ansiReset)
