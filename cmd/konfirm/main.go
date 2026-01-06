@@ -6,6 +6,7 @@ import (
 
 	"konfirm/internal/commands/allow"
 	"konfirm/internal/commands/kubectl"
+	"konfirm/internal/commands/status"
 	"konfirm/internal/commands/support"
 )
 
@@ -20,6 +21,8 @@ func main() {
 		exitWithCode(kubectl.Run(os.Args[2:]))
 	case "allow":
 		exitWithCode(allow.Run(os.Args[2:]))
+	case "status":
+		exitWithCode(status.Run(os.Args[2:]))
 	case "-h", "--help", "help":
 		support.Usage(os.Stdout)
 	case "version":

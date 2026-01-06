@@ -18,6 +18,7 @@ func Usage(w io.Writer) {
 	fmt.Fprintln(w, "  konfirm allow kubectl add <subcommand>")
 	fmt.Fprintln(w, "  konfirm allow kubectl remove <subcommand>")
 	fmt.Fprintln(w, "  konfirm allow kubectl list")
+	fmt.Fprintln(w, "  konfirm status")
 }
 
 func Version(w io.Writer) {
