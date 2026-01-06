@@ -83,29 +83,6 @@ func Run(args []string) int {
 		for _, ctx := range cfg.PermanentAllowContexts {
 			fmt.Fprintln(os.Stdout, ctx)
 		}
-	case "once":
-		if len(args) != 1 {
-			fmt.Fprintln(os.Stderr, "usage: konfirm allow once")
-			return 2
-		}
-
-		currentCtx, err := context.GetCurrentContext()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to resolve context: %v\n", err)
-			return 1
-		}
-
-		st, err := store.LoadState()
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "failed to load state: %v\n", err)
-			return 1
-		}
-		st.SessionAllowedContext = currentCtx
-		if err := store.SaveState(st); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to update state: %v\n", err)
-			return 1
-		}
-		fmt.Fprintf(os.Stdout, "context allowed once for session: %s%s%s\n", ansiBoldRed, currentCtx, ansiReset)
 	default:
 		fmt.Fprintf(os.Stderr, "unknown allow command: %s\n", sub)
 		support.Usage(os.Stderr)

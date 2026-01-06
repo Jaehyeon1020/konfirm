@@ -31,25 +31,7 @@ func Run(args []string) int {
 		return 1
 	}
 
-	st, err := store.LoadState()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load state: %v\n", err)
-		return 1
-	}
-
-	if st.SessionAllowedContext != "" && st.SessionAllowedContext != ctx {
-		st.SessionAllowedContext = ""
-		if err := store.SaveState(st); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to update state: %v\n", err)
-			return 1
-		}
-	}
-
 	if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
-		return execKubectl(args)
-	}
-
-	if st.SessionAllowedContext == ctx {
 		return execKubectl(args)
 	}
 

@@ -15,7 +15,6 @@ func Usage(w io.Writer) {
 	fmt.Fprintln(w, "  konfirm allow add")
 	fmt.Fprintln(w, "  konfirm allow remove <context>")
 	fmt.Fprintln(w, "  konfirm allow list")
-	fmt.Fprintln(w, "  konfirm allow once")
 }
 
 func Version(w io.Writer) {
