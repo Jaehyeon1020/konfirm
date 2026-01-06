@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-const VersionText = "v0.0.0"
+const VersionText = "v0.1.0"
 
 func Usage(w io.Writer) {
 	fmt.Fprintln(w, "konfirm - confirm kubectl context before execution")
@@ -15,6 +15,9 @@ func Usage(w io.Writer) {
 	fmt.Fprintln(w, "  konfirm allow add")
 	fmt.Fprintln(w, "  konfirm allow remove <context>")
 	fmt.Fprintln(w, "  konfirm allow list")
+	fmt.Fprintln(w, "  konfirm allow kubectl add <subcommand>")
+	fmt.Fprintln(w, "  konfirm allow kubectl remove <subcommand>")
+	fmt.Fprintln(w, "  konfirm allow kubectl list")
 }
 
 func Version(w io.Writer) {

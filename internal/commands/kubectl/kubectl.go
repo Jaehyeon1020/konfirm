@@ -31,7 +31,14 @@ func Run(args []string) int {
 		return 1
 	}
 
+	// Skip approval if stored as an allowed context.
 	if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
+		return execKubectl(args)
+	}
+
+	// Skip approval if stored as an allowed kubectl subcommand for the current context.
+	subcommand := getKubectlSubcommand(args)
+	if store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, ctx, subcommand) {
 		return execKubectl(args)
 	}
 
@@ -41,6 +48,31 @@ func Run(args []string) int {
 	}
 
 	return execKubectl(args)
+}
+
+func getKubectlSubcommand(args []string) string {
+	skipNext := false
+	for _, arg := range args {
+		if skipNext {
+			skipNext = false
+			continue
+		}
+		if arg == "--" {
+			continue
+		}
+		if arg == "--context" || arg == "--namespace" || arg == "-n" || arg == "--kubeconfig" {
+			skipNext = true
+			continue
+		}
+		if strings.HasPrefix(arg, "--context=") || strings.HasPrefix(arg, "--namespace=") || strings.HasPrefix(arg, "--kubeconfig=") {
+			continue
+		}
+		if strings.HasPrefix(arg, "-") {
+			continue
+		}
+		return arg
+	}
+	return ""
 }
 
 func promptForApproval(ctx string) error {

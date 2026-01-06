@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	PermanentAllowContexts []string `json:"permanent_allow_contexts"`
+	PermanentAllowContexts       []string            `json:"permanent_allow_contexts"`
+	PermanentAllowKubectlSubcmds map[string][]string `json:"permanent_allow_kubectl_subcommands"` // context:subcommand pair
 }
 
 func LoadConfig() (Config, error) {
@@ -63,7 +64,30 @@ func IsContextAllowed(allowed []string, ctx string) bool {
 	return false
 }
 
+func IsKubectlSubcommandAllowed(allowed map[string][]string, ctx string, subcommand string) bool {
+	if subcommand == "" {
+		return false
+	}
+	items := allowed[ctx]
+	for _, item := range items {
+		if item == subcommand {
+			return true
+		}
+	}
+	return false
+}
+
 func RemoveContext(items []string, target string) []string {
+	result := make([]string, 0, len(items))
+	for _, item := range items {
+		if item != target {
+			result = append(result, item)
+		}
+	}
+	return result
+}
+
+func RemoveKubectlSubcommand(items []string, target string) []string {
 	result := make([]string, 0, len(items))
 	for _, item := range items {
 		if item != target {
