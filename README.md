@@ -2,6 +2,13 @@
 
 konfirm is a small wrapper around kubectl that confirms the effective context before executing any kubectl command.
 
+<img width="473" height="220" alt="스크린샷 2026-01-06 오후 10 43 19" src="https://github.com/user-attachments/assets/dc695fcd-8ba2-4aff-a027-9bf73b5e124b" />
+
+<br />
+
+<img width="472" height="190" alt="스크린샷 2026-01-06 오후 10 44 00" src="https://github.com/user-attachments/assets/02d06f26-7638-4e0c-b62f-9ffbbe89ea12" />
+
+
 ## Features
 - Prompts for confirmation based on the effective context (including `--context` overrides).
 - Lets you permanently allow a context, or allow specific kubectl subcommands per context.
