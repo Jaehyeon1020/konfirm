@@ -19,26 +19,14 @@ konfirm is a small wrapper around kubectl that confirms the effective context be
 
 ## Installation
 
-### Build a local binary
+### Homebrew
+
+Create a tap and use the formula in `konfirm.rb`:
 
 ```bash
-go build -o konfirm ./cmd/konfirm
-mv konfirm /usr/local/bin/
-```
-
-## Uninstall
-
-Remove the binary:
-
-```bash
-rm -f "$(command -v konfirm)"
-```
-
-Remove stored config:
-
-MacOS
-```bash
-rm -f "~/Library/Application\ Support/konfirm/config.json"
+# Install Homebrew: https://brew.sh/
+brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
+brew install Jaehyeon1020/konfirm/konfirm
 ```
 
 ## Usage
@@ -98,4 +86,37 @@ Now you can use kubectl as usual while integrating konfirm:
 
 ```bash
 k get pods
+```
+
+## Shell completion
+
+Generate and source completion in your shell startup file:
+
+```bash
+# zsh
+source <(konfirm completion zsh)
+```
+
+If you install via Homebrew, the completion file is installed automatically.
+
+## Build a local binary (Not Recommended)
+
+```bash
+go build -o konfirm ./cmd/konfirm
+mv konfirm /usr/local/bin/
+```
+
+### Uninstall
+
+Remove the binary:
+
+```bash
+rm -f "$(command -v konfirm)"
+```
+
+Remove stored config:
+
+MacOS
+```bash
+rm -f "~/Library/Application\ Support/konfirm/config.json"
 ```
