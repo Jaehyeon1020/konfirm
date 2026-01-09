@@ -46,12 +46,10 @@ rm -f "~/Library/Application\ Support/konfirm/config.json"
 ```bash
 konfirm kubectl <kubectl args...>
 konfirm k <kubectl args...>
-konfirm allow add
-konfirm allow remove
-konfirm allow list
-konfirm allow kubectl add <subcommand>
-konfirm allow kubectl remove <subcommand>
-konfirm allow kubectl list
+konfirm add <subcommand>
+konfirm add --all
+konfirm remove <subcommand>
+konfirm remove --all
 konfirm status
 ```
 
@@ -72,13 +70,13 @@ konfirm kubectl --context prod-cluster get deploy
 Allow the current context permanently:
 
 ```bash
-konfirm allow add
+konfirm add --all
 ```
 
 Allow a kubectl subcommand (per current context):
 
 ```bash
-konfirm allow kubectl add apply
+konfirm add apply
 ```
 
 Check what is allowed for the current context:
