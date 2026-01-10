@@ -1,7 +1,7 @@
 class Konfirm < Formula
   desc "Confirm kubectl before execution"
   homepage "https://github.com/jaehyeonkim/konfirm"
-  url "https://github.com/jaehyeonkim/konfirm/archive/refs/tags/v0.1.0.tar.gz"
+  url "https://github.com/jaehyeonkim/konfirm/archive/refs/tags/v0.2.0.tar.gz"
   sha256 "추가예정" # TODO: release action
   license "MIT"
 
