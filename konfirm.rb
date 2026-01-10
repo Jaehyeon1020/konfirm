@@ -17,6 +17,22 @@ class Konfirm < Formula
     zsh_completion.install "_konfirm"
   end
 
+  def caveats
+    <<~EOS
+      \e[33;1mZsh completion requires compinit and loading konfirm's completion script.\e[0m
+      \e[33;1mCopy and run this:\e[0m
+
+        {
+          echo ''
+          echo '# konfirm setup'
+          echo 'autoload -Uz compinit && compinit'
+          echo 'source <(konfirm completion zsh)'
+        } >> ~/.zshrc
+
+        source ~/.zshrc
+    EOS
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/konfirm version")
   end
