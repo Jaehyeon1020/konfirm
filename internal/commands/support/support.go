@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-const VersionText = "v0.2.0"
+const VersionText = "v0.2.1"
 
 func Usage(w io.Writer) {
 	fmt.Fprintln(w, "konfirm - confirm kubectl before execution")
