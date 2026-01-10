@@ -19,6 +19,7 @@ class Konfirm < Formula
 
   def caveats
     <<~EOS
+      \e[33;1m✅ konfirm installation succeeded!\e[0m
       \e[33;1mZsh completion requires compinit and loading konfirm's completion script.\e[0m
       \e[33;1mCopy and run this:\e[0m
 
