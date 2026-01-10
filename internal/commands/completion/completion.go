@@ -19,9 +19,11 @@ _konfirm() {
     fi
 
     local -a kwords
-    kwords=($words[2,-1])
-    words=($kwords)
-    CURRENT=$((CURRENT-1))
+    kwords=("${(@)words[2,-1]}")
+    words=("${kwords[@]}")
+    if (( CURRENT > 1 )); then
+      CURRENT=$((CURRENT-1))
+    fi
     _kubectl
   fi
 }
