@@ -2,11 +2,15 @@
 
 konfirm is a small wrapper around kubectl that confirms the effective context before executing any kubectl command.
 
-<img width="473" height="220" alt="스크린샷 2026-01-06 오후 10 43 19" src="https://github.com/user-attachments/assets/dc695fcd-8ba2-4aff-a027-9bf73b5e124b" />
+<img width="415" height="235" alt="스크린샷 2026-01-10 오후 11 00 51" src="https://github.com/user-attachments/assets/3e405976-f5da-492d-87bd-58169d0930df" />
 
 <br />
 
-<img width="472" height="190" alt="스크린샷 2026-01-06 오후 10 44 00" src="https://github.com/user-attachments/assets/02d06f26-7638-4e0c-b62f-9ffbbe89ea12" />
+<img width="493" height="193" alt="스크린샷 2026-01-10 오후 11 01 18" src="https://github.com/user-attachments/assets/ff3a39cd-5bb4-45c2-bb5e-7187cfcfa50b" />
+
+<br />
+
+<img width="468" height="59" alt="image" src="https://github.com/user-attachments/assets/97abb43c-71bc-41b5-9499-941b13170fc1" />
 
 
 ## Features
