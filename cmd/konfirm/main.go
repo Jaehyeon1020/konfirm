@@ -18,7 +18,7 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "kubectl", "k":
+	case "kubectl":
 		exitWithCode(kubectl.Run(os.Args[2:]))
 	case "add":
 		exitWithCode(allow.Run(append([]string{"add"}, os.Args[2:]...)))

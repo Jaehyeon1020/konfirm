@@ -39,7 +39,6 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
-konfirm k <kubectl args...>
 konfirm add <subcommand>
 konfirm add --all
 konfirm remove <subcommand>
@@ -91,25 +90,29 @@ source ~/.zshrc
 Now you can use kubectl as usual while integrating konfirm:
 
 ```bash
+# From now on, running this command will display a prompt asking for approval.
 k get pods
 ```
 
-## Shell completion
-
-Generate and source completion in your shell startup file:
-
-```bash
-# zsh
-source <(konfirm completion zsh)
-```
-
-If you install via Homebrew, the completion file is installed automatically.
 
 ## Build a local binary (Not Recommended)
 
 ```bash
 go build -o konfirm ./cmd/konfirm
 mv konfirm /usr/local/bin/
+```
+
+### Shell completion
+> **If you install via Homebrew, the completion file is installed automatically.**
+>
+> **You do not need to run the command below.**
+
+
+Generate and source completion in your shell startup file:
+
+```bash
+# zsh
+source <(konfirm completion zsh)
 ```
 
 ### Uninstall
