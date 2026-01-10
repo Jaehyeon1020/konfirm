@@ -3,11 +3,11 @@ package support
 import (
 	"fmt"
 	"io"
+	"konfirm/internal/constants"
 )
 
-const VersionText = "v0.2.1"
-
 func Usage(w io.Writer) {
+	fmt.Print(constants.ASCII_LOGO)
 	fmt.Fprintln(w, "konfirm - confirm kubectl before execution")
 	fmt.Fprintln(w, "")
 	fmt.Fprintln(w, "Usage:")
@@ -20,5 +20,6 @@ func Usage(w io.Writer) {
 }
 
 func Version(w io.Writer) {
-	fmt.Fprintln(w, VersionText)
+	fmt.Print(constants.ASCII_LOGO)
+	fmt.Fprintln(w, "konfirm", constants.VERSION)
 }
