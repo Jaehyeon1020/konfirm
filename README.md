@@ -29,6 +29,13 @@ brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
 brew install Jaehyeon1020/konfirm/konfirm
 ```
 
+### Update (Homebrew)
+
+```bash
+brew update
+brew upgrade Jaehyeon1020/konfirm/konfirm
+```
+
 ### Uninstall
 ```bash
 brew uninstall Jaehyeon1020/konfirm/konfirm
