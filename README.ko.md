@@ -1,7 +1,7 @@
 # konfirm
 영문 README: [README.md](README.md)
 
-**konfirm**은 `kubectl` 명령을 실행하기 전에 **실제 적용될 context를 확인하고 승인하도록 하는 경량 래퍼(wrapper)** 도구입니다.
+**konfirm**은 `kubectl` 명령을 실행하기 전에 **실제 적용될 context를 확인하고 승인하도록 하는 래퍼(wrapper)** 입니다.
 
 ![konfirm_v0 3 0_demo_1](https://github.com/user-attachments/assets/e42665da-ddca-4de9-9354-cd1c3b07892f)
 
@@ -25,6 +25,21 @@
 # Homebrew 설치: https://brew.sh/
 brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
 brew install Jaehyeon1020/konfirm/konfirm
+```
+
+`konfirm` 설치 후 아래 코드를 실행하면, auto-completion 기능을 사용할 수 있습니다.
+
+예를 들어 `konfirm kubectl get pods <tab>` 을 통해 조회 가능한 pod의 이름이 자동완성됩니다.
+
+```bash
+{
+  echo ''
+  echo '# konfirm setup'
+  echo 'autoload -Uz compinit && compinit'
+  echo 'source <(konfirm completion zsh)'
+} >> ~/.zshrc
+
+source ~/.zshrc
 ```
 
 ### 업데이트 (Homebrew)
@@ -52,35 +67,59 @@ konfirm remove --all
 konfirm status
 ```
 
-### 사용 예시
+### 명령어별 설명과 예시
 
-현재 context를 확인한 뒤 kubectl 실행:
+`konfirm kubectl <kubectl args...>`  
+`--context` 오버라이드를 포함한 실제 context를 확인한 뒤 kubectl을 실행합니다.
 
 ```bash
+# 현재 context를 확인한 뒤 kubectl 실행.
 konfirm kubectl get pods -n kube-system
-```
 
-context 오버라이드를 사용하는 경우:
-
-```bash
+# context 오버라이드를 명시적으로 확인.
 konfirm kubectl --context prod-cluster get deploy
 ```
 
-현재 context를 **영구적으로 허용**:
+`konfirm add <subcommand>`  
+현재 context에서 특정 kubectl 서브커맨드를 허용합니다.
 
 ```bash
+# 현재 context에서 `kubectl apply` 허용.
+konfirm add apply
+
+# 현재 context에서 `kubectl delete` 허용.
+konfirm add delete
+```
+
+`konfirm add --all`  
+현재 context에서 모든 kubectl 서브커맨드를 허용합니다.
+
+```bash
+# 현재 context에서 모든 kubectl 서브커맨드를 영구적으로 허용.
 konfirm add --all
 ```
 
-특정 kubectl 서브커맨드를 현재 context에서 허용:
+`konfirm remove <subcommand>`  
+현재 context에서 허용한 특정 kubectl 서브커맨드를 제거합니다.
 
 ```bash
-konfirm add apply
+# 현재 context에서 `kubectl apply` 허용을 해제.
+konfirm remove apply
 ```
 
-현재 context에서 허용된 항목 확인:
+`konfirm remove --all`  
+현재 context의 모든 허용 항목을 제거합니다(다시 전체 확인).
 
 ```bash
+# 현재 context에서 모든 허용 항목을 제거.
+konfirm remove --all
+```
+
+`konfirm status`  
+실제 context와 현재 허용 목록을 표시합니다.
+
+```bash
+# 현재 context에서 허용된 항목 확인.
 konfirm status
 ```
 

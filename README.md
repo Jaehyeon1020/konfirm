@@ -1,7 +1,7 @@
 # konfirm
 Korean README: [README.ko.md](README.ko.md)
 
-**konfirm** is a small wrapper around kubectl that confirms the effective context before executing any `kubectl` command.
+**konfirm** is a simple wrapper around kubectl that confirms the effective context before executing any `kubectl` command.
 
 ![konfirm_v0 3 0_demo_1](https://github.com/user-attachments/assets/e42665da-ddca-4de9-9354-cd1c3b07892f)
 
@@ -24,6 +24,21 @@ Create a tap and use the formula in `konfirm.rb`:
 # Install Homebrew: https://brew.sh/
 brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
 brew install Jaehyeon1020/konfirm/konfirm
+```
+
+To enable autocompletion after installing `konfirm`, run the snippet below.
+
+For example, `konfirm kubectl get pods <tab>` autocompletes available Pod names.
+
+```bash
+{
+  echo ''
+  echo '# konfirm setup'
+  echo 'autoload -Uz compinit && compinit'
+  echo 'source <(konfirm completion zsh)'
+} >> ~/.zshrc
+
+source ~/.zshrc
 ```
 
 ### Update (Homebrew)
@@ -50,35 +65,59 @@ konfirm remove --all
 konfirm status
 ```
 
-### Examples
+### Command details and examples
 
-Confirm the current context before running kubectl:
+`konfirm kubectl <kubectl args...>`  
+Runs kubectl only after confirming the effective context (including `--context`).
 
 ```bash
+# Confirm the current context before running kubectl.
 konfirm kubectl get pods -n kube-system
-```
 
-Confirm a context override:
-
-```bash
+# Confirm a context override explicitly.
 konfirm kubectl --context prod-cluster get deploy
 ```
 
-Allow the current context permanently:
+`konfirm add <subcommand>`  
+Allow a specific kubectl subcommand for the current context only.
 
 ```bash
+# Allow `kubectl apply` for the current context.
+konfirm add apply
+
+# Allow `kubectl delete` for the current context.
+konfirm add delete
+```
+
+`konfirm add --all`  
+Allow all kubectl subcommands for the current context.
+
+```bash
+# Allow all kubectl subcommands for the current context.
 konfirm add --all
 ```
 
-Allow a kubectl subcommand (per current context):
+`konfirm remove <subcommand>`  
+Remove a previously allowed kubectl subcommand for the current context.
 
 ```bash
-konfirm add apply
+# Revoke approval for the `kubectl apply` command.
+konfirm remove apply
 ```
 
-Check what is allowed for the current context:
+`konfirm remove --all`  
+Remove all allowances for the current context (back to full confirmation).
 
 ```bash
+# Revoke all allowances for the current context.
+konfirm remove --all
+```
+
+`konfirm status`  
+Show the effective context and the current allowlist.
+
+```bash
+# Check what is allowed for the current context.
 konfirm status
 ```
 
