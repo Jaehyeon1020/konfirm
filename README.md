@@ -1,6 +1,7 @@
 # konfirm
+Korean README: [README.ko.md](README.ko.md)
 
-konfirm is a small wrapper around kubectl that confirms the effective context before executing any kubectl command.
+**konfirm** is a small wrapper around kubectl that confirms the effective context before executing any `kubectl` command.
 
 ![konfirm_v0 3 0_demo_1](https://github.com/user-attachments/assets/e42665da-ddca-4de9-9354-cd1c3b07892f)
 
