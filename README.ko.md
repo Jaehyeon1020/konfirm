@@ -138,37 +138,3 @@ source ~/.zshrc
 # 이후 이 명령을 실행하면 승인 프롬프트가 표시됩니다.
 k get pods
 ```
-
-## 로컬 바이너리 빌드 (권장하지 않음)
-
-```bash
-go build -o konfirm ./cmd/konfirm
-mv konfirm /usr/local/bin/
-```
-
-### 셸 자동 완성
-> **Homebrew로 설치한 경우 자동 완성 파일은 자동으로 설치됩니다.**
->
-> **아래 명령을 실행할 필요가 없습니다.**
-
-쉘 시작 파일에서 자동 완성을 생성하고 로드하려면:
-
-```bash
-# zsh
-source <(konfirm completion zsh)
-```
-
-### 제거
-
-바이너리 삭제:
-
-```bash
-rm -f "$(command -v konfirm)"
-```
-
-설정 파일 삭제:
-
-macOS:
-```bash
-rm -rf ~/Library/Application\ Support/konfirm
-```
