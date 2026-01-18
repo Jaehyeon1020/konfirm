@@ -1,5 +1,4 @@
 # konfirm
-영문 README: [README.md](README.md)
 
 **konfirm**은 `kubectl` 명령을 실행하기 전에 **실제 적용될 context를 확인하고 승인하도록 하는 래퍼(wrapper)** 입니다.
 
@@ -53,6 +52,10 @@ brew upgrade Jaehyeon1020/konfirm/konfirm
 
 ```bash
 brew uninstall Jaehyeon1020/konfirm/konfirm
+```
+
+설정 파일(허용된 context 및 subcommand 포함)까지 삭제하려면:
+```bash
 rm -rf ~/Library/Application\ Support/konfirm
 ```
 
@@ -81,13 +84,13 @@ konfirm kubectl --context prod-cluster get deploy
 ```
 
 `konfirm add <subcommand>`  
-현재 context에서 특정 kubectl 서브커맨드를 허용합니다.
+현재 context에서 특정 kubectl 서브커맨드를 항상 허용합니다.
 
 ```bash
-# 현재 context에서 `kubectl apply` 허용.
+# 현재 context에서 `kubectl apply` 항상 허용.
 konfirm add apply
 
-# 현재 context에서 `kubectl delete` 허용.
+# 현재 context에서 `kubectl delete` 항상 허용.
 konfirm add delete
 ```
 
@@ -138,3 +141,6 @@ source ~/.zshrc
 # 이후 이 명령을 실행하면 승인 프롬프트가 표시됩니다.
 k get pods
 ```
+
+---
+영문 README: [README.md](README.md)

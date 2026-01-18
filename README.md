@@ -1,5 +1,4 @@
 # konfirm
-Korean README: [README.ko.md](README.ko.md)
 
 **konfirm** is a simple wrapper around kubectl that confirms the effective context before executing any `kubectl` command.
 
@@ -51,6 +50,10 @@ brew upgrade Jaehyeon1020/konfirm/konfirm
 ### Uninstall
 ```bash
 brew uninstall Jaehyeon1020/konfirm/konfirm
+```
+
+If you also want to remove the configuration file (including allowed contexts and subcommands):
+```bash
 rm -rf ~/Library/Application\ Support/konfirm
 ```
 
@@ -79,7 +82,7 @@ konfirm kubectl --context prod-cluster get deploy
 ```
 
 `konfirm add <subcommand>`  
-Allow a specific kubectl subcommand for the current context only.
+Always allow a specific kubectl subcommand for the current context.
 
 ```bash
 # Allow `kubectl apply` for the current context.
@@ -90,7 +93,7 @@ konfirm add delete
 ```
 
 `konfirm add --all`  
-Allow all kubectl subcommands for the current context.
+Always allow all kubectl subcommands for the current context.
 
 ```bash
 # Allow all kubectl subcommands for the current context.
@@ -136,3 +139,6 @@ Now you can use kubectl as usual while integrating konfirm:
 # From now on, running this command will display a prompt asking for approval.
 k get pods
 ```
+
+---
+Korean README: [README.ko.md](README.ko.md)
