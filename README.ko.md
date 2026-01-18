@@ -2,7 +2,7 @@
 
 **konfirm**은 `kubectl` 명령을 실행하기 전에 **실제 적용될 context를 확인하고 승인하도록 하는 래퍼(wrapper)** 입니다.
 
-![konfirm_v0 3 0_demo_1](https://github.com/user-attachments/assets/e42665da-ddca-4de9-9354-cd1c3b07892f)
+![demo](demo.gif)
 
 ## 주요 기능
 - `--context` 오버라이드를 포함하여 **실제 적용되는 context 기준으로 확인 프롬프트를 표시**합니다.
