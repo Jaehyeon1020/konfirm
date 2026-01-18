@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"konfirm/internal/constants"
 	"konfirm/internal/context"
 	"konfirm/internal/store"
 )
@@ -26,22 +27,22 @@ func Run(args []string) int {
 		return 1
 	}
 
-	fmt.Fprintf(os.Stdout, "context: %s\n", currentCtx)
+	fmt.Fprintf(os.Stdout, "Context: %s%s%s\n", constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
 	if store.IsContextAllowed(cfg.PermanentAllowContexts, currentCtx) {
 		fmt.Fprintln(os.Stdout, "context allowed: yes")
 		return 0
 	}
 
-	fmt.Fprintln(os.Stdout, "context allowed: no")
+	fmt.Fprintln(os.Stdout, "Context allowed: no")
 	subcommands := cfg.PermanentAllowKubectlSubcmds[currentCtx]
 	if len(subcommands) == 0 {
-		fmt.Fprintln(os.Stdout, "allowed kubectl subcommands: (none)")
+		fmt.Fprint(os.Stdout, "Allowed kubectl subcommands: (none)\n")
 		return 0
 	}
 
-	fmt.Fprintln(os.Stdout, "allowed kubectl subcommands:")
+	fmt.Fprintln(os.Stdout, "Allowed kubectl subcommands:")
 	for _, subcommand := range subcommands {
-		fmt.Fprintln(os.Stdout, subcommand)
+		fmt.Fprintf(os.Stdout, " • %s\n", subcommand)
 	}
 	return 0
 }
