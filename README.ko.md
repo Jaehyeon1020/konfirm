@@ -63,9 +63,9 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
-konfirm add <subcommand>
+konfirm add <subcommand>...
 konfirm add --all
-konfirm remove <subcommand>
+konfirm remove <subcommand>...
 konfirm remove --all
 konfirm status
 ```
@@ -83,15 +83,15 @@ konfirm kubectl get pods -n kube-system
 konfirm kubectl --context prod-cluster get deploy
 ```
 
-`konfirm add <subcommand>`  
-현재 context에서 특정 kubectl 서브커맨드를 항상 허용합니다.
+`konfirm add <subcommand>...`
+현재 context에서 하나 이상의 kubectl 서브커맨드를 항상 허용합니다.
 
 ```bash
 # 현재 context에서 `kubectl apply` 항상 허용.
 konfirm add apply
 
-# 현재 context에서 `kubectl delete` 항상 허용.
-konfirm add delete
+# 여러 서브커맨드를 한 번에 허용.
+konfirm add get logs describe
 ```
 
 `konfirm add --all`  
@@ -102,12 +102,15 @@ konfirm add delete
 konfirm add --all
 ```
 
-`konfirm remove <subcommand>`  
-현재 context에서 허용한 특정 kubectl 서브커맨드를 제거합니다.
+`konfirm remove <subcommand>...`
+현재 context에서 허용한 하나 이상의 kubectl 서브커맨드를 제거합니다.
 
 ```bash
 # 현재 context에서 `kubectl apply` 허용을 해제.
 konfirm remove apply
+
+# 여러 서브커맨드를 한 번에 제거.
+konfirm remove get logs describe
 ```
 
 `konfirm remove --all`  

@@ -31,13 +31,13 @@ func Run(args []string) int {
 }
 
 func handleCommandAdd(args []string) int {
-	allFlagEnabled, subcommand, err := parseAllowArgs(args[1:])
+	allFlagEnabled, subcommands, err := parseAllowArgs(args[1:])
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		return 2
 	}
-	if !allFlagEnabled && subcommand == "" {
-		fmt.Fprintln(os.Stderr, "usage: konfirm add <subcommand> | konfirm add --all")
+	if !allFlagEnabled && len(subcommands) == 0 {
+		fmt.Fprintln(os.Stderr, "usage: konfirm add <subcommand>... | konfirm add --all")
 		return 2
 	}
 
@@ -64,11 +64,13 @@ func handleCommandAdd(args []string) int {
 		if cfg.PermanentAllowKubectlSubcmds == nil {
 			cfg.PermanentAllowKubectlSubcmds = make(map[string][]string)
 		}
-		if !store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, currentCtx, subcommand) {
-			cfg.PermanentAllowKubectlSubcmds[currentCtx] = append(cfg.PermanentAllowKubectlSubcmds[currentCtx], subcommand)
-			fmt.Fprintf(os.Stdout, "kubectl subcommand added to allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-		} else {
-			fmt.Fprintf(os.Stdout, "kubectl subcommand already allowed: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
+		for _, subcommand := range subcommands {
+			if !store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, currentCtx, subcommand) {
+				cfg.PermanentAllowKubectlSubcmds[currentCtx] = append(cfg.PermanentAllowKubectlSubcmds[currentCtx], subcommand)
+				fmt.Fprintf(os.Stdout, "kubectl subcommand added to allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
+			} else {
+				fmt.Fprintf(os.Stdout, "kubectl subcommand already allowed: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
+			}
 		}
 	}
 
@@ -81,13 +83,13 @@ func handleCommandAdd(args []string) int {
 }
 
 func handleCommandRemove(args []string) int {
-	allFlagEnabled, subcommand, err := parseAllowArgs(args[1:])
+	allFlagEnabled, subcommands, err := parseAllowArgs(args[1:])
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		return 2
 	}
-	if !allFlagEnabled && subcommand == "" {
-		fmt.Fprintln(os.Stderr, "usage: konfirm remove <subcommand> | konfirm remove --all")
+	if !allFlagEnabled && len(subcommands) == 0 {
+		fmt.Fprintln(os.Stderr, "usage: konfirm remove <subcommand>... | konfirm remove --all")
 		return 2
 	}
 
@@ -111,11 +113,13 @@ func handleCommandRemove(args []string) int {
 			fmt.Fprintf(os.Stdout, "context not in allow list: %s%s%s\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
 		}
 	} else {
-		if store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, ctx, subcommand) {
-			cfg.PermanentAllowKubectlSubcmds[ctx] = store.RemoveKubectlSubcommand(cfg.PermanentAllowKubectlSubcmds[ctx], subcommand)
-			fmt.Fprintf(os.Stdout, "kubectl subcommand removed from allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
-		} else {
-			fmt.Fprintf(os.Stdout, "kubectl subcommand not in allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
+		for _, subcommand := range subcommands {
+			if store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, ctx, subcommand) {
+				cfg.PermanentAllowKubectlSubcmds[ctx] = store.RemoveKubectlSubcommand(cfg.PermanentAllowKubectlSubcmds[ctx], subcommand)
+				fmt.Fprintf(os.Stdout, "kubectl subcommand removed from allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
+			} else {
+				fmt.Fprintf(os.Stdout, "kubectl subcommand not in allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
+			}
 		}
 	}
 	if err := store.SaveConfig(cfg); err != nil {
@@ -126,25 +130,22 @@ func handleCommandRemove(args []string) int {
 	return 0
 }
 
-func parseAllowArgs(args []string) (bool, string, error) {
+func parseAllowArgs(args []string) (bool, []string, error) {
 	allFlagEnabled := false
-	subcommand := ""
+	var subcommands []string
 	for _, arg := range args {
 		switch {
 		case arg == "--all":
 			allFlagEnabled = true
 		case strings.HasPrefix(arg, "-"):
-			return false, "", fmt.Errorf("unknown flag: %s", arg)
+			return false, nil, fmt.Errorf("unknown flag: %s", arg)
 		default:
-			if subcommand != "" {
-				return false, "", fmt.Errorf("usage: konfirm add <subcommand> | konfirm remove <subcommand>")
-			}
-			subcommand = arg
+			subcommands = append(subcommands, arg)
 		}
 	}
 
-	if allFlagEnabled && subcommand != "" {
-		return false, "", fmt.Errorf("cannot combine --all with a subcommand")
+	if allFlagEnabled && len(subcommands) > 0 {
+		return false, nil, fmt.Errorf("cannot combine --all with a subcommand")
 	}
-	return allFlagEnabled, subcommand, nil
+	return allFlagEnabled, subcommands, nil
 }

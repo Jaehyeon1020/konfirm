@@ -61,9 +61,9 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
-konfirm add <subcommand>
+konfirm add <subcommand>...
 konfirm add --all
-konfirm remove <subcommand>
+konfirm remove <subcommand>...
 konfirm remove --all
 konfirm status
 ```
@@ -81,15 +81,15 @@ konfirm kubectl get pods -n kube-system
 konfirm kubectl --context prod-cluster get deploy
 ```
 
-`konfirm add <subcommand>`  
-Always allow a specific kubectl subcommand for the current context.
+`konfirm add <subcommand>...`
+Always allow one or more kubectl subcommands for the current context.
 
 ```bash
 # Allow `kubectl apply` for the current context.
 konfirm add apply
 
-# Allow `kubectl delete` for the current context.
-konfirm add delete
+# Allow multiple subcommands at once.
+konfirm add get logs describe
 ```
 
 `konfirm add --all`  
@@ -100,12 +100,15 @@ Always allow all kubectl subcommands for the current context.
 konfirm add --all
 ```
 
-`konfirm remove <subcommand>`  
-Remove a previously allowed kubectl subcommand for the current context.
+`konfirm remove <subcommand>...`
+Remove one or more previously allowed kubectl subcommands for the current context.
 
 ```bash
 # Revoke approval for the `kubectl apply` command.
 konfirm remove apply
+
+# Revoke multiple subcommands at once.
+konfirm remove get logs describe
 ```
 
 `konfirm remove --all`  
