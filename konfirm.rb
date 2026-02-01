@@ -2,7 +2,7 @@ class Konfirm < Formula
   desc "Confirm kubectl before execution"
   homepage "https://github.com/Jaehyeon1020/konfirm"
   url "https://github.com/Jaehyeon1020/konfirm/archive/refs/tags/v0.4.0.tar.gz"
-  sha256 ""
+  sha256 "948e17ffbf5e943844c8ed8102549c2a948293291c8e3ff8ec693721bfb59447"
   license "MIT"
 
   depends_on "go" => :build
