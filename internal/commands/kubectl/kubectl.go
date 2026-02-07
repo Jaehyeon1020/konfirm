@@ -32,11 +32,6 @@ func Run(args []string) int {
 		return 1
 	}
 
-	// Skip approval if stored as an allowed context.
-	if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
-		return execKubectl(args)
-	}
-
 	// Skip approval if stored as an allowed kubectl subcommand for the current context.
 	subcommand := getKubectlSubcommand(args)
 	if store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, ctx, subcommand) {

@@ -53,25 +53,30 @@ func handleCommandAdd(args []string) int {
 		return 1
 	}
 
+	if cfg.PermanentAllowKubectlSubcmds == nil {
+		cfg.PermanentAllowKubectlSubcmds = make(map[string][]string)
+	}
+
 	if allFlagEnabled {
-		if !store.IsContextAllowed(cfg.PermanentAllowContexts, currentCtx) {
-			cfg.PermanentAllowContexts = append(cfg.PermanentAllowContexts, currentCtx)
-			fmt.Fprintf(os.Stdout, "context added to allow list: %s%s%s\n", constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-		} else {
-			fmt.Fprintf(os.Stdout, "context already allowed: %s%s%s\n", constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-		}
-	} else {
-		if cfg.PermanentAllowKubectlSubcmds == nil {
-			cfg.PermanentAllowKubectlSubcmds = make(map[string][]string)
-		}
-		for _, subcommand := range subcommands {
-			if !store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, currentCtx, subcommand) {
-				cfg.PermanentAllowKubectlSubcmds[currentCtx] = append(cfg.PermanentAllowKubectlSubcmds[currentCtx], subcommand)
-				fmt.Fprintf(os.Stdout, "kubectl subcommand added to allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
+		subcommands = constants.GetKubectlSubcommands()
+	}
+
+	added := 0
+	for _, subcommand := range subcommands {
+		if !store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, currentCtx, subcommand) {
+			cfg.PermanentAllowKubectlSubcmds[currentCtx] = append(cfg.PermanentAllowKubectlSubcmds[currentCtx], subcommand)
+			if allFlagEnabled {
+				added++
 			} else {
-				fmt.Fprintf(os.Stdout, "kubectl subcommand already allowed: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
+				fmt.Fprintf(os.Stdout, "kubectl subcommand added to allow list: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
 			}
+		} else if !allFlagEnabled {
+			fmt.Fprintf(os.Stdout, "kubectl subcommand already allowed: %s%s%s (context %s%s%s)\n", constants.ANSI_BOLD_BLUE, subcommand, constants.ANSI_RESET, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
 		}
+	}
+
+	if allFlagEnabled {
+		fmt.Fprintf(os.Stdout, "%d kubectl subcommand(s) added to allow list (context %s%s%s)\n", added, constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
 	}
 
 	if err := store.SaveConfig(cfg); err != nil {
@@ -106,11 +111,11 @@ func handleCommandRemove(args []string) int {
 	}
 
 	if allFlagEnabled {
-		if store.IsContextAllowed(cfg.PermanentAllowContexts, ctx) {
-			cfg.PermanentAllowContexts = store.RemoveContext(cfg.PermanentAllowContexts, ctx)
-			fmt.Fprintf(os.Stdout, "context removed from allow list: %s%s%s\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
+		if existing := cfg.PermanentAllowKubectlSubcmds[ctx]; len(existing) > 0 {
+			delete(cfg.PermanentAllowKubectlSubcmds, ctx)
+			fmt.Fprintf(os.Stdout, "all kubectl subcommands removed from allow list (context %s%s%s)\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
 		} else {
-			fmt.Fprintf(os.Stdout, "context not in allow list: %s%s%s\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
+			fmt.Fprintf(os.Stdout, "no allowed subcommands for context: %s%s%s\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
 		}
 	} else {
 		for _, subcommand := range subcommands {

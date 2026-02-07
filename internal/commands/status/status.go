@@ -28,12 +28,6 @@ func Run(args []string) int {
 	}
 
 	fmt.Fprintf(os.Stdout, "Context: %s%s%s\n", constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-	if store.IsContextAllowed(cfg.PermanentAllowContexts, currentCtx) {
-		fmt.Fprintln(os.Stdout, "context allowed: yes")
-		return 0
-	}
-
-	fmt.Fprintln(os.Stdout, "Context allowed: no")
 	subcommands := cfg.PermanentAllowKubectlSubcmds[currentCtx]
 	if len(subcommands) == 0 {
 		fmt.Fprint(os.Stdout, "Allowed kubectl subcommands: (none)\n")

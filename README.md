@@ -90,7 +90,7 @@ konfirm config
 
 `konfirm add <subcommand>...`
 
-Always allow one or more kubectl subcommands for the current context.
+Always allow one or more kubectl subcommands for the current context. Use `--all` to allow all subcommands at once.
 
 ```bash
 # Allow `kubectl apply` for the current context.
@@ -98,20 +98,14 @@ konfirm add apply
 
 # Allow multiple subcommands at once.
 konfirm add get logs describe
-```
 
-`konfirm add --all`
-
-Always allow all kubectl subcommands for the current context.
-
-```bash
 # Allow all kubectl subcommands for the current context.
 konfirm add --all
 ```
 
 `konfirm remove <subcommand>...`
 
-Remove one or more previously allowed kubectl subcommands for the current context.
+Remove one or more previously allowed kubectl subcommands for the current context. Use `--all` to remove all allowances at once.
 
 ```bash
 # Revoke approval for the `kubectl apply` command.
@@ -119,13 +113,7 @@ konfirm remove apply
 
 # Revoke multiple subcommands at once.
 konfirm remove get logs describe
-```
 
-`konfirm remove --all`
-
-Remove all allowances for the current context (back to full confirmation).
-
-```bash
 # Revoke all allowances for the current context.
 konfirm remove --all
 ```

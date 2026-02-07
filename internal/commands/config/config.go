@@ -38,14 +38,7 @@ func Run(args []string) int {
 		return 1
 	}
 
-	if store.IsContextAllowed(cfg.PermanentAllowContexts, currentCtx) {
-		fmt.Fprintf(os.Stdout, "Warning: context %s%s%s is fully allowed (all subcommands)\n",
-			constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-		fmt.Fprintln(os.Stdout, "Run 'konfirm remove --all' first to configure individual subcommands.")
-		return 1
-	}
-
-	allSubcommands := getKubectlSubcommands()
+	allSubcommands := constants.GetKubectlSubcommands()
 
 	allowedSubcommands := cfg.PermanentAllowKubectlSubcmds[currentCtx]
 	if allowedSubcommands == nil {
@@ -133,20 +126,6 @@ Alternatively, you can manage allowed subcommands using:
 	}
 
 	return nil
-}
-
-func getKubectlSubcommands() []string {
-	return []string{
-		"get", "describe", "create", "delete", "apply",
-		"edit", "patch", "replace", "rollout", "scale",
-		"autoscale", "logs", "exec", "port-forward", "proxy",
-		"cp", "attach", "run", "expose", "set", "explain",
-		"diff", "wait", "kustomize", "label", "annotate",
-		"certificate", "cluster-info", "top", "cordon",
-		"uncordon", "drain", "taint", "auth", "debug",
-		"events", "api-resources", "api-versions", "config",
-		"plugin", "version", "completion", "alpha",
-	}
 }
 
 func promptForMode() (string, error) {

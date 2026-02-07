@@ -92,7 +92,7 @@ konfirm config
 
 `konfirm add <subcommand>...`
 
-현재 context에서 하나 이상의 kubectl 서브커맨드를 항상 허용합니다.
+현재 context에서 하나 이상의 kubectl 서브커맨드를 항상 허용합니다. `--all`을 사용하면 모든 서브커맨드를 한 번에 허용할 수 있습니다.
 
 ```bash
 # 현재 context에서 `kubectl apply` 항상 허용.
@@ -100,20 +100,14 @@ konfirm add apply
 
 # 여러 서브커맨드를 한 번에 허용.
 konfirm add get logs describe
-```
 
-`konfirm add --all`  
-
-현재 context에서 모든 kubectl 서브커맨드를 허용합니다.
-
-```bash
 # 현재 context에서 모든 kubectl 서브커맨드를 영구적으로 허용.
 konfirm add --all
 ```
 
 `konfirm remove <subcommand>...`
 
-현재 context에서 허용한 하나 이상의 kubectl 서브커맨드를 제거합니다.
+현재 context에서 허용한 하나 이상의 kubectl 서브커맨드를 제거합니다. `--all`을 사용하면 모든 허용 항목을 한 번에 제거할 수 있습니다.
 
 ```bash
 # 현재 context에서 `kubectl apply` 허용을 해제.
@@ -121,13 +115,7 @@ konfirm remove apply
 
 # 여러 서브커맨드를 한 번에 제거.
 konfirm remove get logs describe
-```
 
-`konfirm remove --all`
-
-현재 context의 모든 허용 항목을 제거합니다(다시 전체 확인).
-
-```bash
 # 현재 context에서 모든 허용 항목을 제거.
 konfirm remove --all
 ```
