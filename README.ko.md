@@ -11,18 +11,13 @@
   - 특정 kubectl 서브커맨드만 선택적으로 허용할 수 있습니다.
 
 ## 사전 요구 사항
-- Go
 - `kubectl`이 설치되어 있고 PATH에 등록되어 있어야 합니다.
 
 ## 설치 방법
 
 ### Homebrew
 
-탭(tap)을 추가한 뒤 `konfirm.rb` 포뮬러를 사용해 설치합니다.
-
 ```bash
-# Homebrew 설치: https://brew.sh/
-brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
 brew install Jaehyeon1020/konfirm/konfirm
 ```
 

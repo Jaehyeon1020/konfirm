@@ -1,0 +1,46 @@
+builds:
+  - main: ./cmd/konfirm
+    binary: konfirm
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - format: tar.gz
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+
+brews:
+  - repository:
+      owner: Jaehyeon1020
+      name: konfirm
+    homepage: https://github.com/Jaehyeon1020/konfirm
+    description: "Confirm your kubectl"
+    license: "MIT"
+    install: |
+      bin.install "konfirm"
+
+      zsh_output = Utils.safe_popen_read(bin/"konfirm", "completion", "zsh")
+      (buildpath/"_konfirm").write zsh_output
+      zsh_completion.install "_konfirm"
+    caveats: |
+      Zsh completion requires compinit and loading konfirm's completion script.
+      Copy and run this:
+
+        {
+          echo ''
+          echo '# konfirm setup'
+          echo 'autoload -Uz compinit && compinit'
+          echo 'source <(konfirm completion zsh)'
+        } >> ~/.zshrc
+
+        source ~/.zshrc
+    test: |
+      assert_match version.to_s, shell_output("#{bin}/konfirm version")

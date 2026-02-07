@@ -10,18 +10,13 @@
 - Lets you permanently allow a context, or allow specific kubectl subcommands per context.
 
 ## Prerequisites
-- Go
-- kubectl installed and available on your PATH
+- `kubectl` installed and available on your PATH
 
 ## Installation
 
 ### Homebrew
 
-Create a tap and use the formula in `konfirm.rb`:
-
 ```bash
-# Install Homebrew: https://brew.sh/
-brew tap Jaehyeon1020/konfirm https://github.com/Jaehyeon1020/konfirm
 brew install Jaehyeon1020/konfirm/konfirm
 ```
 
