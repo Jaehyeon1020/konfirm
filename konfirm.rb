@@ -5,13 +5,13 @@
 class Konfirm < Formula
   desc "Confirm your kubectl"
   homepage "https://github.com/Jaehyeon1020/konfirm"
-  version "0.5.0"
+  version "0.5.1"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.0/konfirm_0.5.0_darwin_amd64.tar.gz"
-      sha256 "ec6f4376b850dfebccf9d156e89f2979ea35386711226f4ac3c2d2e80d5f7475"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_darwin_amd64.tar.gz"
+      sha256 "627a173602a552586fef93ead622e2f735ee5154bdecaae2e18d74bd0f0ed3f2"
 
       def install
         bin.install "konfirm"
@@ -22,8 +22,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.0/konfirm_0.5.0_darwin_arm64.tar.gz"
-      sha256 "45fa2d90f47461da1d66cbb2e44e85296be7d3406b96a6c99db9b26640c6e976"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_darwin_arm64.tar.gz"
+      sha256 "7d527145abe064836f20d7da0de161ee5ead850963240494f05d8395cf65eb92"
 
       def install
         bin.install "konfirm"
@@ -37,8 +37,8 @@ class Konfirm < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.0/konfirm_0.5.0_linux_amd64.tar.gz"
-      sha256 "005e02eaf96900328d7f242efba92b0c7cdf37febf2040c96bb52e0f3e314b5e"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_linux_amd64.tar.gz"
+      sha256 "691d4c569b015cbc7dd862a506a7c03ca3f86fa1d5ed8efdcfe65743247fe722"
       def install
         bin.install "konfirm"
 
@@ -48,8 +48,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.0/konfirm_0.5.0_linux_arm64.tar.gz"
-      sha256 "e04add6c99e6e7f99fb5a684dc046b63b21f2cc96c06c36b070e427661dd3e19"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_linux_arm64.tar.gz"
+      sha256 "c2657c4b24e84ac6596aca1afa2833d9646037e977acd11913badeccd1a3dc66"
       def install
         bin.install "konfirm"
 
@@ -62,17 +62,17 @@ class Konfirm < Formula
 
   def caveats
     <<~EOS
-      Zsh completion requires compinit and loading konfirm's completion script.
-      Copy and run this:
+      \e[33;1mZsh completion requires compinit and loading konfirm's completion script.
+      Copy and run this:\e[0m
 
-        {
-          echo ''
-          echo '# konfirm setup'
-          echo 'autoload -Uz compinit && compinit'
-          echo 'source <(konfirm completion zsh)'
-        } >> ~/.zshrc
+      \e[33m{
+        echo ''
+        echo '# konfirm setup'
+        echo 'autoload -Uz compinit && compinit'
+        echo 'source <(konfirm completion zsh)'
+      } >> ~/.zshrc
 
-        source ~/.zshrc
+      source ~/.zshrc\e[0m
     EOS
   end
 
