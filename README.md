@@ -66,6 +66,7 @@ konfirm status
 ### Command details and examples
 
 `konfirm kubectl <kubectl args...>`
+
 Runs kubectl only after confirming the effective context (including `--context`).
 
 ```bash
@@ -77,16 +78,18 @@ konfirm kubectl --context prod-cluster get deploy
 ```
 
 `konfirm config`
+
 Interactively manage allowed subcommands using fzf. This provides a more user-friendly way to add or remove multiple subcommands at once.
+
+**Note:** This command requires `fzf` to be installed. If `fzf` is not available, you can still use `konfirm add` and `konfirm remove` commands to manage allowances.
 
 ```bash
 # Launch interactive mode to add or remove subcommands.
 konfirm config
 ```
 
-**Note:** This command requires `fzf` to be installed. If `fzf` is not available, you can still use `konfirm add` and `konfirm remove` commands to manage allowances.
-
 `konfirm add <subcommand>...`
+
 Always allow one or more kubectl subcommands for the current context.
 
 ```bash
@@ -97,7 +100,8 @@ konfirm add apply
 konfirm add get logs describe
 ```
 
-`konfirm add --all`  
+`konfirm add --all`
+
 Always allow all kubectl subcommands for the current context.
 
 ```bash
@@ -106,6 +110,7 @@ konfirm add --all
 ```
 
 `konfirm remove <subcommand>...`
+
 Remove one or more previously allowed kubectl subcommands for the current context.
 
 ```bash
@@ -117,6 +122,7 @@ konfirm remove get logs describe
 ```
 
 `konfirm remove --all`
+
 Remove all allowances for the current context (back to full confirmation).
 
 ```bash
@@ -125,6 +131,7 @@ konfirm remove --all
 ```
 
 `konfirm status`
+
 Show the effective context and the current allowlist.
 
 ```bash
