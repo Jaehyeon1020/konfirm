@@ -44,7 +44,7 @@ func Run(args []string) int {
 	}
 
 	if err := promptForApproval(ctx); err != nil {
-		fmt.Fprintf(os.Stderr, "approval failed: %v\n", err)
+		fmt.Fprintln(os.Stderr, err.Error())
 		return 1
 	}
 
@@ -85,7 +85,7 @@ func promptForApproval(ctx string) error {
 
 	fmt.Fprintf(tty, "%skonfirm%s is waiting for your confirmation\n", constants.ANSI_BOLD_BLUE, constants.ANSI_RESET)
 	fmt.Fprintf(tty, "🔒 Context: %s%s%s 🔒\n", constants.ANSI_BOLD_RED, ctx, constants.ANSI_RESET)
-	fmt.Fprintf(tty, "Type [Y/y] to continue: ")
+	fmt.Fprintf(tty, "Continue? [y/N]: ")
 
 	reader := bufio.NewReader(tty)
 	line, err := reader.ReadString('\n')
@@ -93,8 +93,11 @@ func promptForApproval(ctx string) error {
 		return err
 	}
 	line = strings.TrimSpace(line)
+	if line == "" || strings.EqualFold(line, "n") {
+		return errors.New("Aborted")
+	}
 	if !strings.EqualFold(line, "y") {
-		return errors.New("approval phrase mismatch")
+		return errors.New("Invalid input")
 	}
 	fmt.Fprintln(tty, "==================")
 	return nil
