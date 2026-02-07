@@ -13,10 +13,8 @@ func Usage(w io.Writer) {
 	fmt.Fprintln(w, "Usage:")
 	fmt.Fprintln(w, "  konfirm kubectl <kubectl args...>")
 	fmt.Fprintln(w, "  konfirm config")
-	fmt.Fprintln(w, "  konfirm add <subcommand>")
-	fmt.Fprintln(w, "  konfirm add --all")
-	fmt.Fprintln(w, "  konfirm remove <subcommand>")
-	fmt.Fprintln(w, "  konfirm remove --all")
+	fmt.Fprintln(w, "  konfirm add <subcommand>... | --all")
+	fmt.Fprintln(w, "  konfirm remove <subcommand>... | --all")
 	fmt.Fprintln(w, "  konfirm status")
 }
 
