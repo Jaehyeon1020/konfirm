@@ -31,16 +31,16 @@ brews:
       (buildpath/"_konfirm").write zsh_output
       zsh_completion.install "_konfirm"
     caveats: |
-      Zsh completion requires compinit and loading konfirm's completion script.
-      Copy and run this:
+      \e[33;1mZsh completion requires compinit and loading konfirm's completion script.
+      Copy and run this:\e[0m
 
-        {
-          echo ''
-          echo '# konfirm setup'
-          echo 'autoload -Uz compinit && compinit'
-          echo 'source <(konfirm completion zsh)'
-        } >> ~/.zshrc
+      \e[33m{
+        echo ''
+        echo '# konfirm setup'
+        echo 'autoload -Uz compinit && compinit'
+        echo 'source <(konfirm completion zsh)'
+      } >> ~/.zshrc
 
-        source ~/.zshrc
+      source ~/.zshrc\e[0m
     test: |
       assert_match version.to_s, shell_output("#{bin}/konfirm version")
