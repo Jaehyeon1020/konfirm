@@ -11,6 +11,7 @@
 
 ## Prerequisites
 - `kubectl` installed and available on your PATH
+- `fzf` (optional, required for `konfirm config` command) - [Installation Guide](https://github.com/junegunn/fzf)
 
 ## Installation
 
@@ -56,16 +57,15 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
+konfirm config
 konfirm add <subcommand>...
-konfirm add --all
 konfirm remove <subcommand>...
-konfirm remove --all
 konfirm status
 ```
 
 ### Command details and examples
 
-`konfirm kubectl <kubectl args...>`  
+`konfirm kubectl <kubectl args...>`
 Runs kubectl only after confirming the effective context (including `--context`).
 
 ```bash
@@ -75,6 +75,16 @@ konfirm kubectl get pods -n kube-system
 # Confirm a context override explicitly.
 konfirm kubectl --context prod-cluster get deploy
 ```
+
+`konfirm config`
+Interactively manage allowed subcommands using fzf. This provides a more user-friendly way to add or remove multiple subcommands at once.
+
+```bash
+# Launch interactive mode to add or remove subcommands.
+konfirm config
+```
+
+**Note:** This command requires `fzf` to be installed. If `fzf` is not available, you can still use `konfirm add` and `konfirm remove` commands to manage allowances.
 
 `konfirm add <subcommand>...`
 Always allow one or more kubectl subcommands for the current context.
@@ -106,7 +116,7 @@ konfirm remove apply
 konfirm remove get logs describe
 ```
 
-`konfirm remove --all`  
+`konfirm remove --all`
 Remove all allowances for the current context (back to full confirmation).
 
 ```bash
@@ -114,7 +124,7 @@ Remove all allowances for the current context (back to full confirmation).
 konfirm remove --all
 ```
 
-`konfirm status`  
+`konfirm status`
 Show the effective context and the current allowlist.
 
 ```bash

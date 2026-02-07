@@ -6,6 +6,7 @@ import (
 
 	"konfirm/internal/commands/allow"
 	"konfirm/internal/commands/completion"
+	"konfirm/internal/commands/config"
 	"konfirm/internal/commands/kubectl"
 	"konfirm/internal/commands/status"
 	"konfirm/internal/commands/support"
@@ -24,6 +25,8 @@ func main() {
 		exitWithCode(allow.Run(append([]string{"add"}, os.Args[2:]...)))
 	case "remove":
 		exitWithCode(allow.Run(append([]string{"remove"}, os.Args[2:]...)))
+	case "config":
+		exitWithCode(config.Run(os.Args[2:]))
 	case "status":
 		exitWithCode(status.Run(os.Args[2:]))
 	case "completion":

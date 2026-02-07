@@ -16,6 +16,7 @@ func Usage(w io.Writer) {
 	fmt.Fprintln(w, "  konfirm add --all")
 	fmt.Fprintln(w, "  konfirm remove <subcommand>")
 	fmt.Fprintln(w, "  konfirm remove --all")
+	fmt.Fprintln(w, "  konfirm config")
 	fmt.Fprintln(w, "  konfirm status")
 }
 

@@ -12,6 +12,7 @@
 
 ## 사전 요구 사항
 - `kubectl`이 설치되어 있고 PATH에 등록되어 있어야 합니다.
+- `fzf` (선택 사항, `konfirm config` 명령어 사용 시 필요) - [설치 가이드](https://github.com/junegunn/fzf)
 
 ## 설치 방법
 
@@ -58,16 +59,15 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
+konfirm config
 konfirm add <subcommand>...
-konfirm add --all
 konfirm remove <subcommand>...
-konfirm remove --all
 konfirm status
 ```
 
 ### 명령어별 설명과 예시
 
-`konfirm kubectl <kubectl args...>`  
+`konfirm kubectl <kubectl args...>`
 `--context` 오버라이드를 포함한 실제 context를 확인한 뒤 kubectl을 실행합니다.
 
 ```bash
@@ -77,6 +77,16 @@ konfirm kubectl get pods -n kube-system
 # context 오버라이드를 명시적으로 확인.
 konfirm kubectl --context prod-cluster get deploy
 ```
+
+`konfirm config`
+fzf를 사용하여 인터랙티브하게 허용된 서브커맨드를 관리합니다. 여러 서브커맨드를 한 번에 추가하거나 제거할 수 있는 더 편리한 방법을 제공합니다.
+
+```bash
+# 인터랙티브 모드를 실행하여 서브커맨드를 추가하거나 제거.
+konfirm config
+```
+
+**참고:** 이 명령어는 `fzf`가 설치되어 있어야 사용할 수 있습니다. `fzf`가 없는 경우에도 `konfirm add`와 `konfirm remove` 명령어로 허용 항목을 관리할 수 있습니다.
 
 `konfirm add <subcommand>...`
 현재 context에서 하나 이상의 kubectl 서브커맨드를 항상 허용합니다.
@@ -108,7 +118,7 @@ konfirm remove apply
 konfirm remove get logs describe
 ```
 
-`konfirm remove --all`  
+`konfirm remove --all`
 현재 context의 모든 허용 항목을 제거합니다(다시 전체 확인).
 
 ```bash
@@ -116,7 +126,7 @@ konfirm remove get logs describe
 konfirm remove --all
 ```
 
-`konfirm status`  
+`konfirm status`
 실제 context와 현재 허용 목록을 표시합니다.
 
 ```bash
