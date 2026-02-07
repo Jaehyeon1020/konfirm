@@ -5,13 +5,13 @@
 class Konfirm < Formula
   desc "Confirm your kubectl"
   homepage "https://github.com/Jaehyeon1020/konfirm"
-  version "0.5.1"
+  version "0.6.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_darwin_amd64.tar.gz"
-      sha256 "627a173602a552586fef93ead622e2f735ee5154bdecaae2e18d74bd0f0ed3f2"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.6.0/konfirm_0.6.0_darwin_amd64.tar.gz"
+      sha256 "5aed2fe8ab0237ded870f585dffbc3efbdee7bfcb29d45cd27719579eb71feb8"
 
       def install
         bin.install "konfirm"
@@ -22,8 +22,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_darwin_arm64.tar.gz"
-      sha256 "7d527145abe064836f20d7da0de161ee5ead850963240494f05d8395cf65eb92"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.6.0/konfirm_0.6.0_darwin_arm64.tar.gz"
+      sha256 "0c04991e3726dd035c1c9a976e12577bbe6d0f0f8e88b2622715757eec429389"
 
       def install
         bin.install "konfirm"
@@ -37,8 +37,8 @@ class Konfirm < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_linux_amd64.tar.gz"
-      sha256 "691d4c569b015cbc7dd862a506a7c03ca3f86fa1d5ed8efdcfe65743247fe722"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.6.0/konfirm_0.6.0_linux_amd64.tar.gz"
+      sha256 "cbc53ec38fc031819fc71c76d5ff2ac7fa229fd2d0d3bee9e3270598f2a6e2ea"
       def install
         bin.install "konfirm"
 
@@ -48,8 +48,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.5.1/konfirm_0.5.1_linux_arm64.tar.gz"
-      sha256 "c2657c4b24e84ac6596aca1afa2833d9646037e977acd11913badeccd1a3dc66"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.6.0/konfirm_0.6.0_linux_arm64.tar.gz"
+      sha256 "b0312045892030f445b0d53e81e9abc6014097a06c851e2a7b0be5f029840bc6"
       def install
         bin.install "konfirm"
 
