@@ -25,6 +25,8 @@ To enable autocompletion after installing `konfirm`, run the snippet below.
 
 For example, `konfirm kubectl get pods <tab>` autocompletes available Pod names.
 
+#### Zsh
+
 ```bash
 {
   echo ''
@@ -34,6 +36,18 @@ For example, `konfirm kubectl get pods <tab>` autocompletes available Pod names.
 } >> ~/.zshrc
 
 source ~/.zshrc
+```
+
+#### Fish
+
+```bash
+{
+  echo ''
+  echo '# konfirm setup'
+  echo 'konfirm completion fish | source'
+} >> ~/.config/fish/config.fish
+
+source ~/.config/fish/config.fish
 ```
 
 ### Update (Homebrew)

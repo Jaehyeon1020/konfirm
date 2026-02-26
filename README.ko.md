@@ -26,6 +26,8 @@ brew install Jaehyeon1020/konfirm/konfirm
 
 예를 들어 `konfirm kubectl get pods <tab>` 을 통해 조회 가능한 pod의 이름이 자동완성됩니다.
 
+#### Zsh
+
 ```bash
 {
   echo ''
@@ -35,6 +37,18 @@ brew install Jaehyeon1020/konfirm/konfirm
 } >> ~/.zshrc
 
 source ~/.zshrc
+```
+
+#### Fish
+
+```bash
+{
+  echo ''
+  echo '# konfirm setup'
+  echo 'konfirm completion fish | source'
+} >> ~/.config/fish/config.fish
+
+source ~/.config/fish/config.fish
 ```
 
 ### 업데이트 (Homebrew)
