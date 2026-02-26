@@ -31,6 +31,18 @@ _konfirm() {
 compdef _konfirm konfirm
 `
 
+const fishScript = `# konfirm kubectl completion for fish
+function __konfirm_kubectl_complete
+    set -l tokens (commandline -opc)
+    set -e tokens[1]
+    set -l cur (commandline -ct)
+    complete -C (string join ' ' $tokens $cur)
+end
+
+complete -c konfirm -f -n "not __fish_seen_subcommand_from kubectl add remove config status completion help version" -a "kubectl add remove config status completion help version"
+complete -c konfirm -f -n "__fish_seen_subcommand_from kubectl" -a "(__konfirm_kubectl_complete)"
+`
+
 func Run(args []string) int {
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "missing shell (zsh)")
@@ -40,8 +52,10 @@ func Run(args []string) int {
 	switch args[0] {
 	case "zsh":
 		fmt.Print(zshScript)
+	case "fish":
+		fmt.Print(fishScript)
 	default:
-		fmt.Fprintf(os.Stderr, "unsupported shell: %s\n", args[0])
+		fmt.Fprintf(os.Stderr, "unsupported shell: %s (supported: zsh, fish)\n", args[0])
 		return 2
 	}
 
