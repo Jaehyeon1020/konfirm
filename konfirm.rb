@@ -5,15 +5,15 @@
 class Konfirm < Formula
   desc "Confirm your kubectl"
   homepage "https://github.com/Jaehyeon1020/konfirm"
-  version "0.7.0"
+  version "0.8.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.7.0/konfirm_0.7.0_darwin_amd64.tar.gz"
-      sha256 "0ba7a9496df4ffc327753fdb6d557b5fd658f538ea36ec7701c9f23b941c82a1"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.0/konfirm_0.8.0_darwin_amd64.tar.gz"
+      sha256 "975cd75d4b50c31ce0f77ae1093e6d6aa8736531803c464ae1126daa173a34e9"
 
-      def install
+      define_method(:install) do
         bin.install "konfirm"
 
         zsh_output = Utils.safe_popen_read(bin/"konfirm", "completion", "zsh")
@@ -22,10 +22,10 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.7.0/konfirm_0.7.0_darwin_arm64.tar.gz"
-      sha256 "19cbcd56a24205229d127059324ee0c3ae5feb4af66af6767fa6c67d727d875a"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.0/konfirm_0.8.0_darwin_arm64.tar.gz"
+      sha256 "6375edb8892c0da56bad5d09c37dbdc840ddb9a520a0a4936e6bd0f92072211e"
 
-      def install
+      define_method(:install) do
         bin.install "konfirm"
 
         zsh_output = Utils.safe_popen_read(bin/"konfirm", "completion", "zsh")
@@ -37,9 +37,9 @@ class Konfirm < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.7.0/konfirm_0.7.0_linux_amd64.tar.gz"
-      sha256 "ed480e4ff1603ca9c6328501b720c0bb138401c0dd592a9985f7c24130982c8b"
-      def install
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.0/konfirm_0.8.0_linux_amd64.tar.gz"
+      sha256 "94032bc404a0aaaea849dc6884a6296eb963349bc0cba0294afafe2f3e23d25f"
+      define_method(:install) do
         bin.install "konfirm"
 
         zsh_output = Utils.safe_popen_read(bin/"konfirm", "completion", "zsh")
@@ -48,9 +48,9 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.7.0/konfirm_0.7.0_linux_arm64.tar.gz"
-      sha256 "8fd18459610fce03e7358c870e0298d71b1d34dd5d0bf38a7b8fb6446e0d879d"
-      def install
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.0/konfirm_0.8.0_linux_arm64.tar.gz"
+      sha256 "37240b9cb2fc612883076778ebcde4252b14a6ecdc79ed745b53ad2872c15c9f"
+      define_method(:install) do
         bin.install "konfirm"
 
         zsh_output = Utils.safe_popen_read(bin/"konfirm", "completion", "zsh")
