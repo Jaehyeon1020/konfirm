@@ -9,7 +9,7 @@ const ASCII_LOGO = `
 
 `
 
-const VERSION = "v0.4.0"
+const VERSION = "v0.8.1"
 
 const (
 	ANSI_BOLD_RED  = "\x1b[1;31m"
