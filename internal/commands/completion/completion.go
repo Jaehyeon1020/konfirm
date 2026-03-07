@@ -36,7 +36,7 @@ function __konfirm_kubectl_complete
     set -l tokens (commandline -opc)
     set -e tokens[1]
     set -l cur (commandline -ct)
-    complete -C (string join ' ' $tokens $cur)
+    complete -C (string join -- ' ' $tokens $cur)
 end
 
 complete -c konfirm -f -n "not __fish_seen_subcommand_from kubectl add remove config status completion help version" -a "kubectl add remove config status completion help version"
