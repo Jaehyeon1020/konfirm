@@ -5,13 +5,13 @@
 class Konfirm < Formula
   desc "Confirm your kubectl"
   homepage "https://github.com/Jaehyeon1020/konfirm"
-  version "0.8.1"
+  version "0.8.2"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.1/konfirm_0.8.1_darwin_amd64.tar.gz"
-      sha256 "73be825d5a25cb55cadae7377beb0f4692cf99f66fa3ff85599a1fa871996d7b"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.2/konfirm_0.8.2_darwin_amd64.tar.gz"
+      sha256 "5d78f1c5b3fa04a6855faa6704ef514350c785e7d12fbeef3edf35a668a7f9f5"
 
       define_method(:install) do
         bin.install "konfirm"
@@ -22,8 +22,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.1/konfirm_0.8.1_darwin_arm64.tar.gz"
-      sha256 "0956389037a6eb39a18f49da9cfa56b11142ca38ffebf31bafa038e5579b9d4e"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.2/konfirm_0.8.2_darwin_arm64.tar.gz"
+      sha256 "da6e62cb3af71bb04069a3f0277bebdfa4a0693b96f0f0baaef6a9015e9fc34b"
 
       define_method(:install) do
         bin.install "konfirm"
@@ -37,8 +37,8 @@ class Konfirm < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.1/konfirm_0.8.1_linux_amd64.tar.gz"
-      sha256 "c813c7eba05cc38f20c6a0a23a73442b618054379eb1dd76abf2de2486644197"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.2/konfirm_0.8.2_linux_amd64.tar.gz"
+      sha256 "b073a1172690ad7de9371eade7bf10d3947bf095c41abebda43a22ffbeb2ac07"
       define_method(:install) do
         bin.install "konfirm"
 
@@ -48,8 +48,8 @@ class Konfirm < Formula
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.1/konfirm_0.8.1_linux_arm64.tar.gz"
-      sha256 "e287fb94eca339bb509d9e8c8d9880e4d828c90fd148423081705a78e469224c"
+      url "https://github.com/Jaehyeon1020/konfirm/releases/download/v0.8.2/konfirm_0.8.2_linux_arm64.tar.gz"
+      sha256 "fca5a69fa6511783e5ee967aea0f8441e87fcfb7cbc5bd16725dabff06cf6672"
       define_method(:install) do
         bin.install "konfirm"
 
