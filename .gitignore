@@ -3,3 +3,4 @@ dist
 konfirm
 .DS_Store
 .agents
+.worktrees
