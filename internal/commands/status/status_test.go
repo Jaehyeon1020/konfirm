@@ -230,6 +230,34 @@ func TestRunReturnsOneWhenConfigLoadFails(t *testing.T) {
 	}
 }
 
+func TestRunReturnsOneWhenConfigPathFails(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	restore := stubDeps(t, deps{
+		stdout:     &stdout,
+		stderr:     &stderr,
+		configPath: func() (string, error) { return "", errors.New("config path failed") },
+		loadConfig: func() (store.Config, error) {
+			t.Fatal("loadConfig should not be called when configPath fails")
+			return store.Config{}, nil
+		},
+	})
+	defer restore()
+
+	code := Run(nil)
+
+	if code != 1 {
+		t.Fatalf("Run(nil) code = %d, want 1", code)
+	}
+	got := stdout.String()
+	if !strings.Contains(got, "  error: config path failed") {
+		t.Fatalf("Run(nil) stdout missing config path error\nstdout:\n%s", got)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("Run(nil) stderr = %q, want empty", stderr.String())
+	}
+}
+
 func TestRunRejectsArguments(t *testing.T) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
