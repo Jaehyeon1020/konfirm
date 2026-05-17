@@ -5,6 +5,8 @@ import (
 	"errors"
 	"strings"
 	"testing"
+
+	"konfirm/internal/store"
 )
 
 func TestRenderReportWithContextAndAllowlist(t *testing.T) {
@@ -126,4 +128,156 @@ func TestRenderReportWithConfigError(t *testing.T) {
 			t.Fatalf("renderReport output missing %q\noutput:\n%s", want, got)
 		}
 	}
+}
+
+func TestRunPrintsDiagnosticsForAvailableStatus(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	restore := stubDeps(t, deps{
+		stdout: &stdout,
+		stderr: &stderr,
+		loadConfig: func() (store.Config, error) {
+			return store.Config{
+				PermanentAllowKubectlSubcmds: map[string][]string{
+					"prod-cluster": {"get", "logs"},
+				},
+			}, nil
+		},
+		currentContext: func() (string, error) { return "prod-cluster", nil },
+		getenv:         func(name string) string { return "/bin/zsh" },
+	})
+	defer restore()
+
+	code := Run(nil)
+
+	if code != 0 {
+		t.Fatalf("Run(nil) code = %d, want 0", code)
+	}
+	got := stdout.String()
+	required := []string{
+		"  current: prod-cluster",
+		"    get",
+		"    logs",
+	}
+	for _, want := range required {
+		if !strings.Contains(got, want) {
+			t.Fatalf("Run(nil) stdout missing %q\nstdout:\n%s", want, got)
+		}
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("Run(nil) stderr = %q, want empty", stderr.String())
+	}
+}
+
+func TestRunContinuesWhenCurrentContextFails(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	restore := stubDeps(t, deps{
+		stdout:         &stdout,
+		stderr:         &stderr,
+		currentContext: func() (string, error) { return "", errors.New("current-context failed") },
+		lookPath:       func(name string) (string, error) { return "", errors.New("missing") },
+		getenv:         func(name string) string { return "" },
+	})
+	defer restore()
+
+	code := Run(nil)
+
+	if code != 0 {
+		t.Fatalf("Run(nil) code = %d, want 0", code)
+	}
+	got := stdout.String()
+	required := []string{
+		"  current: unavailable (current-context failed)",
+		"  allowed for current context: unavailable because current context could not be resolved",
+		"  kubectl: missing",
+		"  fzf: missing",
+		"  detected shell: unknown",
+	}
+	for _, want := range required {
+		if !strings.Contains(got, want) {
+			t.Fatalf("Run(nil) stdout missing %q\nstdout:\n%s", want, got)
+		}
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("Run(nil) stderr = %q, want empty", stderr.String())
+	}
+}
+
+func TestRunReturnsOneWhenConfigLoadFails(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	restore := stubDeps(t, deps{
+		stdout:         &stdout,
+		stderr:         &stderr,
+		loadConfig:     func() (store.Config, error) { return store.Config{}, errors.New("bad json") },
+		currentContext: func() (string, error) { return "prod-cluster", nil },
+		getenv:         func(name string) string { return "/bin/fish" },
+	})
+	defer restore()
+
+	code := Run(nil)
+
+	if code != 1 {
+		t.Fatalf("Run(nil) code = %d, want 1", code)
+	}
+	got := stdout.String()
+	if !strings.Contains(got, "  error: bad json") {
+		t.Fatalf("Run(nil) stdout missing config error\nstdout:\n%s", got)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("Run(nil) stderr = %q, want empty", stderr.String())
+	}
+}
+
+func TestRunRejectsArguments(t *testing.T) {
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	restore := stubDeps(t, deps{
+		stdout: &stdout,
+		stderr: &stderr,
+	})
+	defer restore()
+
+	code := Run([]string{"--json"})
+
+	if code != 2 {
+		t.Fatalf("Run([--json]) code = %d, want 2", code)
+	}
+	if stdout.Len() != 0 {
+		t.Fatalf("Run([--json]) stdout = %q, want empty", stdout.String())
+	}
+	if !strings.Contains(stderr.String(), "usage: konfirm status") {
+		t.Fatalf("Run([--json]) stderr missing usage\nstderr:\n%s", stderr.String())
+	}
+}
+
+func stubDeps(t *testing.T, replacement deps) func() {
+	t.Helper()
+
+	original := commandDeps
+	if replacement.stdout == nil {
+		replacement.stdout = bytes.NewBuffer(nil)
+	}
+	if replacement.stderr == nil {
+		replacement.stderr = bytes.NewBuffer(nil)
+	}
+	if replacement.configPath == nil {
+		replacement.configPath = func() (string, error) { return "/tmp/konfirm/config.json", nil }
+	}
+	if replacement.loadConfig == nil {
+		replacement.loadConfig = func() (store.Config, error) { return store.Config{}, nil }
+	}
+	if replacement.currentContext == nil {
+		replacement.currentContext = func() (string, error) { return "dev-cluster", nil }
+	}
+	if replacement.lookPath == nil {
+		replacement.lookPath = func(name string) (string, error) { return "/usr/bin/" + name, nil }
+	}
+	if replacement.getenv == nil {
+		replacement.getenv = func(name string) string { return "" }
+	}
+
+	commandDeps = replacement
+	return func() { commandDeps = original }
 }

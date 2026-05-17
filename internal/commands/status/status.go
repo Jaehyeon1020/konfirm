@@ -4,11 +4,32 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"path/filepath"
 
-	"konfirm/internal/constants"
 	"konfirm/internal/context"
 	"konfirm/internal/store"
 )
+
+type deps struct {
+	stdout         io.Writer
+	stderr         io.Writer
+	configPath     func() (string, error)
+	loadConfig     func() (store.Config, error)
+	currentContext func() (string, error)
+	lookPath       func(string) (string, error)
+	getenv         func(string) string
+}
+
+var commandDeps = deps{
+	stdout:         os.Stdout,
+	stderr:         os.Stderr,
+	configPath:     store.ConfigPath,
+	loadConfig:     store.LoadConfig,
+	currentContext: context.GetCurrentContext,
+	lookPath:       exec.LookPath,
+	getenv:         os.Getenv,
+}
 
 type report struct {
 	Context        string
@@ -80,32 +101,61 @@ func completionHint(shell string) string {
 
 func Run(args []string) int {
 	if len(args) != 0 {
-		fmt.Fprintln(os.Stderr, "usage: konfirm status")
+		fmt.Fprintln(commandDeps.stderr, "usage: konfirm status")
 		return 2
 	}
 
-	cfg, err := store.LoadConfig()
+	r, exitCode := collectReport(commandDeps)
+	renderReport(commandDeps.stdout, r)
+	return exitCode
+}
+
+func collectReport(d deps) (report, int) {
+	r := report{
+		KubectlFound:  hasCommand(d, "kubectl"),
+		FzfFound:      hasCommand(d, "fzf"),
+		DetectedShell: detectShell(d.getenv("SHELL")),
+	}
+
+	ctx, ctxErr := d.currentContext()
+	if ctxErr != nil {
+		r.ContextErr = ctxErr
+		r.ContextMissing = true
+	} else {
+		r.Context = ctx
+	}
+
+	path, err := d.configPath()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
-		return 1
+		r.ConfigErr = err
+		return r, 1
 	}
+	r.ConfigPath = path
 
-	currentCtx, err := context.GetCurrentContext()
+	cfg, err := d.loadConfig()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "failed to resolve context: %v\n", err)
-		return 1
+		r.ConfigErr = err
+		return r, 1
 	}
 
-	fmt.Fprintf(os.Stdout, "Context: %s%s%s\n", constants.ANSI_BOLD_RED, currentCtx, constants.ANSI_RESET)
-	subcommands := cfg.PermanentAllowKubectlSubcmds[currentCtx]
-	if len(subcommands) == 0 {
-		fmt.Fprint(os.Stdout, "Allowed kubectl subcommands: (none)\n")
-		return 0
+	if !r.ContextMissing {
+		r.Allowed = cfg.PermanentAllowKubectlSubcmds[r.Context]
 	}
 
-	fmt.Fprintln(os.Stdout, "Allowed kubectl subcommands:")
-	for _, subcommand := range subcommands {
-		fmt.Fprintf(os.Stdout, " • %s\n", subcommand)
+	return r, 0
+}
+
+func hasCommand(d deps, name string) bool {
+	_, err := d.lookPath(name)
+	return err == nil
+}
+
+func detectShell(shellPath string) string {
+	shell := filepath.Base(shellPath)
+	switch shell {
+	case "zsh", "fish":
+		return shell
+	default:
+		return "unknown"
 	}
-	return 0
 }
