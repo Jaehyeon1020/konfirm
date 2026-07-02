@@ -7,7 +7,7 @@ import (
 
 const zshScript = `# konfirm kubectl completion for zsh
 _konfirm() {
-  if [[ $words[2] == "kubectl" ]]; then
+  if [[ $words[2] == "kubectl" || $words[2] == "kubecolor" ]]; then
     if (( ! $+functions[_kubectl] )); then
       if command -v kubectl >/dev/null 2>&1; then
         source <(kubectl completion zsh 2>/dev/null)
@@ -39,8 +39,8 @@ function __konfirm_kubectl_complete
     complete -C (string join -- ' ' $tokens $cur)
 end
 
-complete -c konfirm -f -n "not __fish_seen_subcommand_from kubectl add remove config status completion help version" -a "kubectl add remove config status completion help version"
-complete -c konfirm -f -n "__fish_seen_subcommand_from kubectl" -a "(__konfirm_kubectl_complete)"
+complete -c konfirm -f -n "not __fish_seen_subcommand_from kubectl kubecolor add remove config status completion help version" -a "kubectl kubecolor add remove config status completion help version"
+complete -c konfirm -f -n "__fish_seen_subcommand_from kubectl kubecolor" -a "(__konfirm_kubectl_complete)"
 `
 
 func Run(args []string) int {
