@@ -11,6 +11,7 @@
 
 ## Prerequisites
 - `kubectl` installed and available on your PATH
+- `kubecolor` installed and available on your PATH (optional, required for `konfirm kubecolor`)
 - `fzf` (optional, required for `konfirm config` command) - [Installation Guide](https://github.com/junegunn/fzf)
 
 ## Installation
@@ -71,6 +72,7 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
+konfirm kubecolor <kubectl args...>
 konfirm config
 konfirm add <subcommand>...
 konfirm remove <subcommand>...
@@ -89,6 +91,15 @@ konfirm kubectl get pods -n kube-system
 
 # Confirm a context override explicitly.
 konfirm kubectl --context prod-cluster get deploy
+```
+
+`konfirm kubecolor <kubectl args...>`
+
+Runs kubecolor only after confirming the effective context. Allowlisted kubectl subcommands are shared with `konfirm kubectl`.
+
+```bash
+# Confirm the current context before running kubecolor.
+konfirm kubecolor get pods -n kube-system
 ```
 
 `konfirm config`
@@ -147,6 +158,7 @@ Add the alias to your `~/.zshrc`, then reload your shell:
 
 ```bash
 echo 'alias k="konfirm kubectl"' >> ~/.zshrc
+echo 'alias kc="konfirm kubecolor"' >> ~/.zshrc
 source ~/.zshrc
 ```
 

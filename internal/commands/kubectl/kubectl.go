@@ -14,19 +14,41 @@ import (
 	"konfirm/internal/store"
 )
 
+type deps struct {
+	effectiveContext  func([]string) (string, error)
+	loadConfig        func() (store.Config, error)
+	promptForApproval func(string) error
+	execCommand       func(string, []string) int
+}
+
+var commandDeps = deps{
+	effectiveContext:  context.GetEffectiveContext,
+	loadConfig:        store.LoadConfig,
+	promptForApproval: promptForApproval,
+	execCommand:       execKubectlCommand,
+}
+
 func Run(args []string) int {
+	return run("kubectl", args)
+}
+
+func RunKubecolor(args []string) int {
+	return run("kubecolor", args)
+}
+
+func run(commandName string, args []string) int {
 	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "missing kubectl args")
+		fmt.Fprintf(os.Stderr, "missing %s args\n", commandName)
 		return 2
 	}
 
-	ctx, err := context.GetEffectiveContext(args)
+	ctx, err := commandDeps.effectiveContext(args)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to resolve context: %v\n", err)
 		return 1
 	}
 
-	cfg, err := store.LoadConfig()
+	cfg, err := commandDeps.loadConfig()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to load config: %v\n", err)
 		return 1
@@ -35,15 +57,15 @@ func Run(args []string) int {
 	// Skip approval if stored as an allowed kubectl subcommand for the current context.
 	subcommand := getKubectlSubcommand(args)
 	if store.IsKubectlSubcommandAllowed(cfg.PermanentAllowKubectlSubcmds, ctx, subcommand) {
-		return execKubectl(args)
+		return commandDeps.execCommand(commandName, args)
 	}
 
-	if err := promptForApproval(ctx); err != nil {
+	if err := commandDeps.promptForApproval(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		return 1
 	}
 
-	return execKubectl(args)
+	return commandDeps.execCommand(commandName, args)
 }
 
 func getKubectlSubcommand(args []string) string {
@@ -99,24 +121,28 @@ func promptForApproval(ctx string) error {
 }
 
 func execKubectl(args []string) int {
-	cmd := exec.Command("kubectl", args...)
+	return execKubectlCommand("kubectl", args)
+}
+
+func execKubectlCommand(name string, args []string) int {
+	cmd := exec.Command(name, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = os.Environ()
 	if err := cmd.Run(); err != nil {
-		return commandExitCode(err)
+		return commandExitCode(name, err)
 	}
 	return 0
 }
 
-func commandExitCode(err error) int {
+func commandExitCode(name string, err error) int {
 	var exitErr *exec.ExitError
 	if errors.As(err, &exitErr) {
 		if exitErr.ProcessState != nil {
 			return exitErr.ProcessState.ExitCode()
 		}
 	}
-	fmt.Fprintf(os.Stderr, "failed to run kubectl: %v\n", err)
+	fmt.Fprintf(os.Stderr, "failed to run %s: %v\n", name, err)
 	return 1
 }

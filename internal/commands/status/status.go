@@ -39,6 +39,7 @@ type report struct {
 	ConfigErr      error
 	Allowed        []string
 	KubectlFound   bool
+	KubecolorFound bool
 	FzfFound       bool
 	DetectedShell  string
 }
@@ -72,6 +73,7 @@ func renderReport(w io.Writer, r report) {
 	fmt.Fprintln(w, "")
 	fmt.Fprintln(w, "Dependencies")
 	fmt.Fprintf(w, "  kubectl: %s\n", foundLabel(r.KubectlFound))
+	fmt.Fprintf(w, "  kubecolor: %s\n", foundLabel(r.KubecolorFound))
 	fmt.Fprintf(w, "  fzf: %s\n", foundLabel(r.FzfFound))
 
 	fmt.Fprintln(w, "")
@@ -79,6 +81,7 @@ func renderReport(w io.Writer, r report) {
 	fmt.Fprintf(w, "  detected shell: %s\n", r.DetectedShell)
 	fmt.Fprintf(w, "  completion: %s\n", completionHint(r.DetectedShell))
 	fmt.Fprintln(w, "  recommended alias: alias k=\"konfirm kubectl\"")
+	fmt.Fprintln(w, "  kubecolor alias: alias kc=\"konfirm kubecolor\"")
 }
 
 func foundLabel(found bool) string {
@@ -112,9 +115,10 @@ func Run(args []string) int {
 
 func collectReport(d deps) (report, int) {
 	r := report{
-		KubectlFound:  hasCommand(d, "kubectl"),
-		FzfFound:      hasCommand(d, "fzf"),
-		DetectedShell: detectShell(d.getenv("SHELL")),
+		KubectlFound:   hasCommand(d, "kubectl"),
+		KubecolorFound: hasCommand(d, "kubecolor"),
+		FzfFound:       hasCommand(d, "fzf"),
+		DetectedShell:  detectShell(d.getenv("SHELL")),
 	}
 
 	ctx, ctxErr := d.currentContext()

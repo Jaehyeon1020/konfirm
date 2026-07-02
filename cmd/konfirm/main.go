@@ -21,6 +21,8 @@ func main() {
 	switch os.Args[1] {
 	case "kubectl":
 		exitWithCode(kubectl.Run(os.Args[2:]))
+	case "kubecolor":
+		exitWithCode(kubectl.RunKubecolor(os.Args[2:]))
 	case "add":
 		exitWithCode(allow.Run(append([]string{"add"}, os.Args[2:]...)))
 	case "remove":

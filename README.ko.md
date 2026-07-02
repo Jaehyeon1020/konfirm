@@ -12,6 +12,7 @@
 
 ## 사전 요구 사항
 - `kubectl`이 설치되어 있고 PATH에 등록되어 있어야 합니다.
+- `kubecolor`가 설치되어 있고 PATH에 등록되어 있어야 합니다. (선택 사항, `konfirm kubecolor` 명령어 사용 시 필요)
 - `fzf` (선택 사항, `konfirm config` 명령어 사용 시 필요) - [설치 가이드](https://github.com/junegunn/fzf)
 
 ## 설치 방법
@@ -73,6 +74,7 @@ rm -rf ~/Library/Application\ Support/konfirm
 
 ```bash
 konfirm kubectl <kubectl args...>
+konfirm kubecolor <kubectl args...>
 konfirm config
 konfirm add <subcommand>...
 konfirm remove <subcommand>...
@@ -91,6 +93,15 @@ konfirm kubectl get pods -n kube-system
 
 # context 오버라이드를 명시적으로 확인.
 konfirm kubectl --context prod-cluster get deploy
+```
+
+`konfirm kubecolor <kubectl args...>`
+
+실제 context를 확인한 뒤 kubecolor를 실행합니다. 허용된 kubectl 서브커맨드 목록은 `konfirm kubectl`과 공유합니다.
+
+```bash
+# 현재 context를 확인한 뒤 kubecolor 실행.
+konfirm kubecolor get pods -n kube-system
 ```
 
 `konfirm config`
@@ -149,6 +160,7 @@ konfirm status
 
 ```bash
 echo 'alias k="konfirm kubectl"' >> ~/.zshrc
+echo 'alias kc="konfirm kubecolor"' >> ~/.zshrc
 source ~/.zshrc
 ```
 

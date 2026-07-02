@@ -11,12 +11,13 @@ import (
 
 func TestRenderReportWithContextAndAllowlist(t *testing.T) {
 	report := report{
-		Context:       "prod-cluster",
-		ConfigPath:    "/tmp/konfirm/config.json",
-		Allowed:       []string{"get", "logs"},
-		KubectlFound:  true,
-		FzfFound:      true,
-		DetectedShell: "zsh",
+		Context:        "prod-cluster",
+		ConfigPath:     "/tmp/konfirm/config.json",
+		Allowed:        []string{"get", "logs"},
+		KubectlFound:   true,
+		KubecolorFound: true,
+		FzfFound:       true,
+		DetectedShell:  "zsh",
 	}
 
 	var out bytes.Buffer
@@ -33,11 +34,13 @@ func TestRenderReportWithContextAndAllowlist(t *testing.T) {
 		"    logs",
 		"Dependencies",
 		"  kubectl: found",
+		"  kubecolor: found",
 		"  fzf: found",
 		"Shell setup",
 		"  detected shell: zsh",
 		"  completion: add `source <(konfirm completion zsh)` to ~/.zshrc",
 		"  recommended alias: alias k=\"konfirm kubectl\"",
+		"  kubecolor alias: alias kc=\"konfirm kubecolor\"",
 	}
 	for _, want := range required {
 		if !strings.Contains(got, want) {
@@ -48,12 +51,13 @@ func TestRenderReportWithContextAndAllowlist(t *testing.T) {
 
 func TestRenderReportWithNoAllowlist(t *testing.T) {
 	report := report{
-		Context:       "dev-cluster",
-		ConfigPath:    "/tmp/konfirm/config.json",
-		Allowed:       nil,
-		KubectlFound:  true,
-		FzfFound:      false,
-		DetectedShell: "fish",
+		Context:        "dev-cluster",
+		ConfigPath:     "/tmp/konfirm/config.json",
+		Allowed:        nil,
+		KubectlFound:   true,
+		KubecolorFound: false,
+		FzfFound:       false,
+		DetectedShell:  "fish",
 	}
 
 	var out bytes.Buffer
@@ -64,6 +68,7 @@ func TestRenderReportWithNoAllowlist(t *testing.T) {
 		"  current: dev-cluster",
 		"  allowed for current context: (none)",
 		"  kubectl: found",
+		"  kubecolor: missing",
 		"  fzf: missing",
 		"  detected shell: fish",
 		"  completion: add `konfirm completion fish | source` to ~/.config/fish/config.fish",
@@ -80,6 +85,7 @@ func TestRenderReportWithUnavailableContextAndUnknownShell(t *testing.T) {
 		ContextErr:     errors.New("kubectl failed"),
 		ConfigPath:     "/tmp/konfirm/config.json",
 		KubectlFound:   false,
+		KubecolorFound: false,
 		FzfFound:       false,
 		DetectedShell:  "unknown",
 		ContextMissing: true,
@@ -93,6 +99,7 @@ func TestRenderReportWithUnavailableContextAndUnknownShell(t *testing.T) {
 		"  current: unavailable (kubectl failed)",
 		"  allowed for current context: unavailable because current context could not be resolved",
 		"  kubectl: missing",
+		"  kubecolor: missing",
 		"  fzf: missing",
 		"  detected shell: unknown",
 		"  completion: run `konfirm completion zsh` or `konfirm completion fish` for setup guidance",
